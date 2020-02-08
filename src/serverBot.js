@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import consultaReceita from "./services/consultaCNPJ";
+import clientRun from "./commands/commands";
 import config from "./config/config.json";
 
 const config = config;
@@ -34,10 +34,10 @@ client.on("message", async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  if (command === "cnpj") {
-    const dados = await consultaReceita(args[0]);
-    return message.reply(dados);
-
+  try {
+    clientRun(client, message, command, args);
+  } catch (error) {
+    return message.reply('Foi mal, não consegui executar seu comando.')
   }
 });
 client.login(config.token);
